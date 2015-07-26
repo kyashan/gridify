@@ -61,7 +61,7 @@
 						maxColumns : null,
 						responsive : true,
 						newItemClass: null,
-						containerId: null,
+						containerId: null
 
 					}, opts || {});
 
@@ -144,7 +144,7 @@
 						console.log('Initializing');
 						gridifyCtrl.firstLoaded({
 											width: element.outerWidth(true),
-											height: element.outerHeight(true),
+											height: element.outerHeight(true)
 										});
 						item.position = positionElement;
 						positionElement();
