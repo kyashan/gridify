@@ -26,7 +26,7 @@ Anytime a new item is appended or removed from the list, all items will automati
 <br/>
 ##Gridify options
 
-### `maxColumns`
+### `columns`
 
 (Default: `null`)
 
@@ -37,7 +37,7 @@ You can specify a **fixed columns number** in order to avoid the list layout ada
 *Example:*
 
 ```html
-<ul gridify={listToWatch : elementsList, maxColumns : 3}>
+<ul gridify={listToWatch : elementsList, columns : 3}>
     <li gridify-item="element" ng-repeat="element in elementsList">
     </li>
 </ul>
