@@ -1,5 +1,5 @@
 /*
- * Gridify - Responsive grid layout (edo.io, Google Keep, Pinterest style) for angularjs-based application
+ * Gridify - Cascading grid layout (edo.io, Google Keep, Pinterest style) for angularjs-based application
  * https://github.com/kyashan
  * (c) 2015 MIT License
  */
@@ -45,7 +45,7 @@
 
 				this.firstLoaded = function(dim){
 					$scope.dimSet = true;
-					this.colsNum = $scope.options.maxColumns || this.calculateCols($element.width(), dim.width);
+					this.colsNum = $scope.options.columns || this.calculateCols($element.width(), dim.width);
 					$scope.itemWidth = dim.width;
 					$($element).css('width', $scope.itemWidth * this.colsNum);
 				}
@@ -58,7 +58,7 @@
 					var opts = $scope.$eval(attrs.gridify);
 					$scope.options = angular.extend({
 						listToWatch : null,
-						maxColumns : null,
+						columns : null,
 						responsive : true,
 						newItemClass: null,
 						containerId: null
@@ -81,7 +81,7 @@
 					var container = $scope.options.containerId ? $('#' + $scope.options.containerId) : window
 
 					function positionAllElms(position){
-						gridifyCtrl.colsNum = $scope.options.maxColumns || gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth);
+						gridifyCtrl.colsNum = $scope.options.columns || gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth);
 						$(element).css('width', $scope.itemWidth * gridifyCtrl.colsNum);
 						for (var i = 0; i < $scope.toWatch.length; i++) {
 							if (position){
