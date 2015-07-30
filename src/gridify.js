@@ -69,7 +69,7 @@
 						responsive : true,
 						newItemClass: null,
 						containerId: null,
-						firstElementIsStatic: false,
+						firstElementIsStatic: false
 					}, opts || {});
 
 					if ($scope.options.firstElementIsStatic) element.children().eq(0).css('top', element.children().eq(0).css('top'));
