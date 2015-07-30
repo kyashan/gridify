@@ -1,5 +1,5 @@
 /*
- * Gridify - Cascading grid layout (edo.io, Google Keep, Pinterest style) for angularjs-based application
+ * Gridify - Dynamic cascading grid layout (edo.io, Google Keep, Pinterest style) for ng-repeat in angularjs-based application
  * https://github.com/kyashan
  * (c) 2015 MIT License
  */
@@ -26,6 +26,8 @@
 
 				$scope.itemWidth = 0;
 
+				$scope.gridList = [];
+
 				this.calculateCols = function(parentWidth, childWidth){
 					return Math.floor(parentWidth /childWidth);
 				};
@@ -39,7 +41,6 @@
 					else {
 						offsetTop = parseInt(child[0].style.top.replace('px','')) + child.outerHeight(true);
 					}
-
 					return offsetTop;
 				}
 
@@ -50,6 +51,13 @@
 					$($element).css('width', $scope.itemWidth * this.colsNum);
 				}
 
+				$scope.$watch('gridList', function(nv, ov){
+					for (var i = 0; i < nv.length; i++) {
+						if (nv[i].position) nv[i].position();
+					};
+				}, true);
+
+
 			}],
 			restrict: 'AE',
 			link: {
@@ -57,53 +65,60 @@
 
 					var opts = $scope.$eval(attrs.gridify);
 					$scope.options = angular.extend({
-						listToWatch : null,
 						columns : null,
 						responsive : true,
 						newItemClass: null,
-						containerId: null
-
+						containerId: null,
+						listPromise: null,
+						firstElementIsStatic: false,
 					}, opts || {});
+
+					if ($scope.options.firstElementIsStatic) element.children().eq(0).css('top', element.children().eq(0).css('top'));
+
+					$scope.staticElementNum = 0;
+					if ($scope.options.firstElementIsStatic) $scope.staticElementNum = 1;
 
 				},
 
 				post: function($scope, element, attrs, gridifyCtrl) {
 
-					//Assign list to watch
-					$scope.toWatch = $scope.options.listToWatch || alert('Gridify: please choose a variable to watch');
-					
 					gridifyCtrl.init(element);
 
-					if ($scope.options.responsive) $(window).on('resize', function(){
+					if ($scope.options.responsive || $scope.options.columns) $(window).on('resize', function(){
+						// if ($scope.colsNum == gridifyCtrl.colsNum()) return;
+						if (gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth) == gridifyCtrl.colsNum) return;
 						positionAllElms();
 					});
 
 					var container = $scope.options.containerId ? $('#' + $scope.options.containerId) : window
 
-					function positionAllElms(position){
+					function positionAllElms(position) {
+						function placeElm(i) {
+							if (position){
+
+								if (i % gridifyCtrl.colsNum == 0){ //Re-render olny the column
+
+									$scope.gridList[i].position();
+								}
+
+							} else {
+
+								$scope.gridList[i].position();
+
+							}
+						}
+
 						gridifyCtrl.colsNum = $scope.options.columns || gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth);
 						$(element).css('width', $scope.itemWidth * gridifyCtrl.colsNum);
-						for (var i = 0; i < $scope.toWatch.length; i++) {
-							if (position){
-								if (i % gridifyCtrl.colsNum == 0){ //Re-render olny the column
-									$scope.toWatch[i].position();
-								}
-							} else {
-								$scope.toWatch[i].position();
-							}
-						};
-					}
+						
+						for (var i = 0; i < $scope.gridList.length; i++) {
+							placeElm(i);
+						}
+					};
 
 					$scope.$on('gridify.re-render', function(e, args){
-						console.log(args);
 						var i = args ? args.index : null;
 						positionAllElms(i);
-					});
-
-					$scope.$watchCollection('toWatch', function(nv, ov){
-						for (var i = 0; i < nv.length; i++) {
-							nv[i].position();
-						};
 					});
 				}
 			}
@@ -118,6 +133,7 @@
 
 				pre: function ($scope, element, attrs, gridifyCtrl) {
 
+
 					var $elm = $(element);
 
 					//Assign item
@@ -131,17 +147,18 @@
 						$timeout(function(){
 							var index = $scope.$index;
 							var left, top;
+
 							//Set left
-							$elm.css('left', element.outerWidth(true) * (index % gridifyCtrl.colsNum));
+							$elm.css('left', element.outerWidth(true) * ((index + $scope.staticElementNum) % gridifyCtrl.colsNum));
+
 							// Set top
-							$elm.css('top', gridifyCtrl.getPrevElementOffset(index));
+							$elm.css('top', gridifyCtrl.getPrevElementOffset(index + $scope.staticElementNum));
 							loaded = true;
 						}, 0);
 					};
 
 					//Initialize
 					(function init(){
-						console.log('Initializing');
 						gridifyCtrl.firstLoaded({
 											width: element.outerWidth(true),
 											height: element.outerHeight(true)
@@ -157,7 +174,10 @@
 
 				}, post: function($scope, element, attrs, gridifyCtrl){
 					$timeout(function(){
-						if ($scope.$last) gridifyCtrl.lastElementRendered = true;
+						if ($scope.$last) {
+							gridifyCtrl.lastElementRendered = true;
+							$rootScope.$broadcast('gridify.list-loaded');
+						}
 					}, 20)
 				}
 			}
