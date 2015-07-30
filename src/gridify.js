@@ -69,7 +69,6 @@
 						responsive : true,
 						newItemClass: null,
 						containerId: null,
-						listPromise: null,
 						firstElementIsStatic: false,
 					}, opts || {});
 
