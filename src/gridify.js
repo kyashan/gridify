@@ -1,5 +1,5 @@
 /*
- * Gridify - Dynamic cascading grid layout (edo.io, Google Keep, Pinterest style) for ng-repeat in angularjs-based application
+ * Gridify - Cascading grid for masonry/staggered layout (edo.io, Google Keep, Pinterest style) for ng-repeat in angularjs-based application
  * https://github.com/kyashan
  * (c) 2015 MIT License
  */
@@ -26,7 +26,7 @@
 
 				$scope.itemWidth = 0;
 
-				$scope.gridList = [];
+				$scope.gridifiedList = [];
 
 				this.calculateCols = function(parentWidth, childWidth){
 					return Math.floor(parentWidth /childWidth);
@@ -51,7 +51,7 @@
 					$($element).css('width', $scope.itemWidth * this.colsNum);
 				}
 
-				$scope.$watch('gridList', function(nv, ov){
+				$scope.$watch('gridifiedList', function(nv, ov){
 					for (var i = 0; i < nv.length; i++) {
 						if (nv[i].position) nv[i].position();
 					};
@@ -84,7 +84,6 @@
 					gridifyCtrl.init(element);
 
 					if ($scope.options.responsive || $scope.options.columns) $(window).on('resize', function(){
-						// if ($scope.colsNum == gridifyCtrl.colsNum()) return;
 						if (gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth) == gridifyCtrl.colsNum) return;
 						positionAllElms();
 					});
@@ -97,12 +96,12 @@
 
 								if (i % gridifyCtrl.colsNum == 0){ //Re-render olny the column
 
-									$scope.gridList[i].position();
+									$scope.gridifiedList[i].position();
 								}
 
 							} else {
 
-								$scope.gridList[i].position();
+								$scope.gridifiedList[i].position();
 
 							}
 						}
@@ -110,7 +109,7 @@
 						gridifyCtrl.colsNum = $scope.options.columns || gridifyCtrl.calculateCols($(container).width(), $scope.itemWidth);
 						$(element).css('width', $scope.itemWidth * gridifyCtrl.colsNum);
 						
-						for (var i = 0; i < $scope.gridList.length; i++) {
+						for (var i = 0; i < $scope.gridifiedList.length; i++) {
 							placeElm(i);
 						}
 					};
