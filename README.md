@@ -20,6 +20,7 @@ Cascading grid for masonry/staggered layout ([edo.io](http://www.edo.io), [Googl
 
 
 Anytime a new item is appended or removed from the list,  all items will automatically re-position according to the new list length. This will also happen when any item changes its height. 
+
 The variable `gridifiedList` is used to ensure that the list reference is always the same also in case of ordered or filtered lists.
 
 <br/>
