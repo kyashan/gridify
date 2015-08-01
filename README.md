@@ -1,27 +1,26 @@
 # Gridify
-Cascading grid layout ([edo.io](http://www.edo.io), [Google Keep](https://keep.google.com/), [Pinterest](https://www.pinterest.com/) style) for [angularjs](https://angularjs.org/)-based application.
+Cascading grid for masonry/staggered layout ([edo.io](http://www.edo.io), [Google Keep](https://keep.google.com/), [Pinterest](https://www.pinterest.com/) style) for [angularjs](https://angularjs.org/)-based application.
 
 ##Usage
 
 1. Add `jj.gridify` module to your app's module dependencies.
-2. Include dependencies in your html
-3. Use directives `gridify` on the parent and `gridify-item` on children items
+2. Include dependencies in your html.
+3. Use directives `gridify` on the parent and `gridify-item` on children items.
+4. Add reference to ng-repeat list to `gridifiedList`.
 
 <br/>
 ##Usage example
 
 ```html
-<ul gridify={listToWatch : elementsList}>
-    <li gridify-item="element" ng-repeat="element in elementsList">
+<ul gridify>
+    <li gridify-item="element" ng-repeat="element in gridifiedList = elementsList">
     </li>
 </ul>
 ```
 
-In case of dynamic list, you have to: 
-1. Add `gridify` directive to the parent element and pass as attribute an object with key `listToWatch` and the list you want to watch as value. 
-2. Add `gridify-item` to the child element and pass as attribute the property of the ng-repeat object
 
-Anytime a new item is appended or removed from the list, all items will automatically re-position according to the new list length.
+Anytime a new item is appended or removed from the list,  all items will automatically re-position according to the new list length. This will also happen when any item changes its height. 
+The variable `gridifiedList` is used to ensure that the list reference is always the same also in case of ordered or filtered lists.
 
 <br/>
 ##Gridify options
@@ -37,8 +36,8 @@ You can specify a **fixed columns number** in order to avoid the list layout ada
 *Example:*
 
 ```html
-<ul gridify={listToWatch : elementsList, columns : 3}>
-    <li gridify-item="element" ng-repeat="element in elementsList">
+<ul gridify={columns : 3}>
+    <li gridify-item="element in gridifiedList = elementsList">
     </li>
 </ul>
 ```
@@ -54,8 +53,8 @@ In case no fixed columns number is specified, `gridify` will automatically adapt
 
 ```html
 <div id="listParent">
-  <ul gridify={listToWatch : elementsList, containerId: 'listParent'}>
-      <li gridify-item="element" ng-repeat="element in elementsList">
+  <ul gridify={containerId: 'listParent'}>
+      <li gridify-item="element" ng-repeat="element in gridifiedList = elementsList">
       </li>
   </ul>
 <div>
@@ -84,8 +83,8 @@ Specify a **custom css class** to add to every new element appended to the list.
   
 </style>
 
-<ul gridify={listToWatch : elementsList, newItemClass : 'fadeIn'}>
-    <li gridify-item="element" ng-repeat="element in elementsList">
+<ul gridify={newItemClass : 'fadeIn'}>
+    <li gridify-item="element" ng-repeat="element in gridifiedList = elementsList">
     </li>
 </ul>
 ```
@@ -97,18 +96,37 @@ Specify a **custom css class** to add to every new element appended to the list.
 
 The layout will automatically adapt when browser window is resizing. Set `false` to disable it.
 
-**n.b**. Option `maxColumns`, if specified, takes **priority** over `responsive` value.
+**n.b**. Option `columns`, if specified, takes **priority** over `responsive` value.
 
 
 *Example:*
 
 ```html
-<ul gridify={listToWatch : elementsList, responsive: false}>
+<ul gridify={responsive: false}>
+    <li gridify-item="element" ng-repeat="element in gridifiedList = elementsList">
+    </li>
+</ul>
+```
+<br/>
+
+### `firstElementIsStatic`
+
+(Default: `false`)
+
+In case there is one static element at the beginning of the list and outside of the ng-repeat, set `firstElementIsStatic` value to `true`.
+
+*Example:*
+
+```html
+<ul gridify={firstElementIsStatic: true}>
+    <li></li> <!--Static element-->
     <li gridify-item="element" ng-repeat="element in elementsList">
     </li>
 </ul>
 ```
 <br/>
+
+
 ## Events
 
 if you want to force the grid and the items to re-position, you can broadcast the following event:
