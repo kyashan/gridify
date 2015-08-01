@@ -132,7 +132,7 @@ In case there is one static element at the beginning of the list and outside of 
 
 if you want to force the grid and the items to re-position, you can broadcast the following event:
 - ``gridify.re-render``
-This can be useful as a callback when the height of a child item changes. If the ng-repeat `index` of the item is passed to the broadcast, you can contain the re-position only to the items on the same column, otherwise by default, it will re-position all items in the grid.
+This can be useful as a callback when the height of a child item changes and the grid doesn't adapt automatically. If the ng-repeat `index` of the item is passed to the broadcast, you can contain the re-position only to the items on the same column, otherwise by default, it will re-position all items in the grid.
 
 *Example:*
 
