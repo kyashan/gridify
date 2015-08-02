@@ -41,7 +41,6 @@
 					else {
 						offsetTop = parseInt(child[0].style.top.replace('px','')) + child.outerHeight(true);
 					}
-					console.log(i, offsetTop);
 					return offsetTop;
 				}
 
