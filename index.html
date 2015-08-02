@@ -18,6 +18,7 @@
 
 				padding: 0;
 				margin: 0;
+				font-family: sans-serif;
 
 			}
 
@@ -32,7 +33,7 @@
 			}
 
 			#list-wrapper {
-				width: 80%;
+				width: 70%;
 				background-color: black;
 				margin: 0 auto;
 			}
@@ -49,14 +50,24 @@
 			li {
 				width: 200px;
 				height: auto;
-				min-height: 300px;
+				min-height: 100px;
 				margin: 20px 10px 20px 10px;
 				position: absolute;
-				background-color: #0091FF;
+				padding: 20px 10px;
+				/*background-color: #0091FF;*/
 				list-style: none;
-				-moz-transition: all .6s ease-out;
-				-webkit-transition: all .6s ease-out;
-				transition: all .6s ease-out;
+				color: #333;
+				  font-size: 14px;
+				-moz-transition: left .4s ease-out, top .4s ease-out;
+				-webkit-transition: left .4s ease-out, top .4s ease-out;
+				transition: left .4s ease-out, top .4s ease-out;
+				-moz-box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+				-webkit-box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+				box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+			}
+
+			h3 {
+				margin: 0 0 10px 0;
 			}
 
 			button {
@@ -111,9 +122,11 @@
 		<!-- <div id="lolo" style="width: 60%; overflow: hidden; height: auto; background-color: red"> -->
 		<div id="list-wrapper">
 			<ul set-columns gridify="{newItemClass : 'ciao', containerId : 'list-wrapper'}">
-				<li id="{{person._id}}" gridify-item="person" ng-repeat="person in (gridifiedList = lista)" ng-click="removeItem($index)">
+				<!-- <li>Add new</li> -->
+				<li id="{{person._id}}" gridify-item="person" ng-repeat="person in (gridifiedList = lista)" ng-click="removeItem($index)" ng-style="{'background-color' : person.color}">
 				<!-- <li gridify-item ng-repeat="person in lista track by $index" ng-click="removeAll()"> -->
-				{{$index}} - {{($index + 1) % colsNum == 0}}<br/>	
+				<br/>
+				<h3>#{{$index + 1}} NOTE </h3>	
 				{{person.content}}
 				</li>
 			</ul>
