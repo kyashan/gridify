@@ -41,6 +41,7 @@
 					else {
 						offsetTop = parseInt(child[0].style.top.replace('px','')) + child.outerHeight(true);
 					}
+					console.log(i, offsetTop);
 					return offsetTop;
 				}
 
@@ -52,9 +53,12 @@
 				}
 
 				$scope.$watch('gridifiedList', function(nv, ov){
-					for (var i = 0; i < nv.length; i++) {
-						if (nv[i].position) nv[i].position();
-					};
+					$timeout(function(){ //This timeout is to allow new element to position properly
+						for (var i = 0; i < nv.length; i++) {
+								if (nv[i].position) nv[i].position();
+							
+						};
+					}, 0);
 				}, true);
 
 
@@ -142,6 +146,7 @@
 					//Auto run on link function
 					function positionElement(){
 						if($scope.options.newItemClass && !loaded && gridifyCtrl.lastElementRendered) $elm.addClass($scope.options.newItemClass);
+						if(!loaded && gridifyCtrl.lastElementRendered && $scope.staticElementNum == 0 && $scope.$index == 0) $elm.css('top', 0);
 						$timeout(function(){
 							var index = $scope.$index;
 							var left, top;
@@ -162,7 +167,7 @@
 											height: element.outerHeight(true)
 										});
 						item.position = positionElement;
-						positionElement();
+						// positionElement();
 					})();
 
 					$(element).on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd webkitAnimationEnd oanimationend msAnimationEnd animationend', 
