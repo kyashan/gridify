@@ -75,7 +75,7 @@
 						firstElementIsStatic: false
 					}, opts || {});
 
-					if ($scope.options.firstElementIsStatic) element.children().eq(0).css('top', element.children().eq(0).css('top'));
+					if ($scope.options.firstElementIsStatic) element.children().eq(0).css('top', 0);
 
 					$scope.staticElementNum = 0;
 					if ($scope.options.firstElementIsStatic) $scope.staticElementNum = 1;
@@ -149,7 +149,6 @@
 						$timeout(function(){
 							var index = $scope.$index;
 							var left, top;
-
 							//Set left
 							$elm.css('left', element.outerWidth(true) * ((index + $scope.staticElementNum) % gridifyCtrl.colsNum));
 
@@ -166,7 +165,7 @@
 											height: element.outerHeight(true)
 										});
 						item.position = positionElement;
-						// positionElement();
+						positionElement();
 					})();
 
 					$(element).on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd webkitAnimationEnd oanimationend msAnimationEnd animationend', 
