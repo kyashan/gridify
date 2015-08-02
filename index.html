@@ -1,0 +1,208 @@
+<!doctype html>
+<html ng-app="app">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+		<script src="src/gridify.js"></script>
+		<script src="example/main.js"></script>
+
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+		<style>
+
+			body {
+
+				padding: 0;
+				margin: 0;
+				font-family: 'Open Sans', sans-serif;
+
+			}
+
+			#buttons-wrapper {
+				width: 100%;
+				height: 110px;
+				position: fixed;
+				top: 0;
+				z-index: 9;
+				background-color: rgba(250,250,250, 0.98);
+				border-bottom: 1px dotted #ccc;
+			}
+
+			#buttons-wrapper h2 {
+				float: left;
+				margin: 10px 0 3px 20px;
+				text-align: left;
+				font-size: 26px;
+			}
+
+			#buttons-wrapper p, #buttons-wrapper a {
+				float: left;
+				margin: 0 0 0 22px;
+				clear: left;
+				font-size: 11px;
+				text-align: left;
+			}
+
+			#buttons-wrapper a {
+				margin-top: 5px;
+				font-weight: bolder;
+				color: #0091FF;
+			}
+
+			#list-wrapper {
+				width: 80%;
+				background-color: black;
+				margin: 0 auto;
+			}
+
+			ul {
+				position: relative;
+				/*width: 90%;*/
+				height: auto;
+				margin: 0 auto;
+				padding: 0;
+				margin-top: 120px;
+			}
+
+			li {
+				width: 200px;
+				height: auto;
+				min-height: 100px;
+				margin: 20px 10px 10px 10px;
+				position: absolute;
+				padding: 20px 10px;
+				/*background-color: #0091FF;*/
+				list-style: none;
+				color: #333;
+				font-size: 12px;
+				-moz-transition: left .4s ease-out, top .4s ease-out;
+				-webkit-transition: left .4s ease-out, top .4s ease-out;
+				transition: left .4s ease-out, top .4s ease-out;
+				-moz-box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+				-webkit-box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+				box-shadow: 0px 1px 1px 0px rgba(51,51,51, 0.4);
+			}
+
+			.note-layer {
+				position: absolute;
+				height: 100%;
+				top: 0;
+				left: 0;
+				width: 100%;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+
+			}
+
+			.note-layer > div {
+				display: inline-table;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+				/*background-color: rgba(51,51,51,0.9);*/
+				color: #fafafa;
+			}
+
+			.note-layer > div > div {
+				display: table-cell;
+				vertical-align: middle;
+				cursor: pointer;
+			}
+
+			.note-layer span {
+				border-top: 1px solid rgba(250,250,250,0.1);
+				border-bottom: 1px solid rgba(250,250,250,0.1);
+				padding: 4px 8px;
+				font-weight: bolder;
+			}
+
+			h3 {
+				margin: 0 0 10px 0;
+			}
+
+			button {
+				background-color: transparent;
+			  	border: 2px solid rgb(114, 122, 204);
+			  	color: rgb(114, 122, 204);
+			  	font-size: 11px;
+			  	text-transform: uppercase;
+			  	padding: 16px 30px;
+			  	cursor: pointer;
+			  	margin: 30px 8px 30px 8px;
+			  	border-radius: 2px;
+			  	-moz-transition: all .2s ease-out;
+				-webkit-transition: all .2s ease-out;
+				transition: all .2s ease-out;
+				outline: none;
+				height: 50px;
+			}
+
+			button:hover {
+				background-color: rgb(114, 122, 204);
+				color: white;
+				cursor: pointer;
+			}
+
+			button:active {
+				color: white;
+			}
+
+			.fade-in-layer {
+				-moz-animation: simpleFadeIn .2s ease-out;
+				-webkit-animation: simpleFadeIn .2s ease-out;
+				animation: simpleFadeIn .2s ease-out;
+			}
+
+
+			.fade-in {
+				-moz-animation: simpleFadeIn 1s linear;
+				-webkit-animation: simpleFadeIn 1s linear;
+				animation: simpleFadeIn 1s linear;
+			}
+
+			@keyframes simpleFadeIn {
+			    from {opacity: 0;}
+			    to {opacity: 1;}
+			}
+
+		</style>
+
+	</head>
+	<body ng-controller="prova">
+		<div id="buttons-wrapper" style="text-align: right">
+			<h2>Gridify</h2>
+			<p>Cascading grid for masonry/staggered layout<br/> for ng-repeat in angularjs-based application</p>
+			<a href="https://github.com/kyashan">https://github.com/kyashan</a>
+			<button ng-click="addItem()" class="add">add new</button>
+			<button ng-click="removeRandom()" style="margin-right: 20px">remove one</button>
+
+		</div>
+		<!-- <div id="lolo" style="width: 60%; overflow: hidden; height: auto; background-color: red"> -->
+		<div id="list-wrapper">
+			<ul set-columns gridify="{newItemClass : 'fade-in', containerId : 'list-wrapper'}">
+				<!-- <li>Add new</li> -->
+				<li id="{{person._id}}" gridify-item="person" ng-repeat="person in (gridifiedList = lista)" ng-style="{'background-color' : person.color}" ng-init="!enterNote" ng-mouseenter="enterNote = true" ng-mouseleave="enterNote = false">
+				<!-- <li gridify-item ng-repeat="person in lista track by $index" ng-click="removeAll()"> -->
+				
+				<h3>#{{$index + 1}} NOTE </h3>	
+				{{person.content}}
+				<div class="note-layer fade-in-layer" ng-if="enterNote">
+					<div ng-click="removeItem($index)">
+						<div style="background-color: rgba(51, 51, 51, 0.92)">
+							<span>remove it</span>
+						</div>
+						
+					</div>
+				</div>
+				</li>
+			</ul>
+		</div>
+		<!-- </div> -->
+	</body>
+</html>
